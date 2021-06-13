@@ -1,23 +1,58 @@
-globals [number-of-turtles]
+globals [sigma rho beta initial-y-value]
 turtles-own [zcor]
+
+to click
+  if mouse-inside? and mouse-down? [
+    if not any? turtles[setup]
+    ask turtles [
+      pu
+      set xcor mouse-xcor
+      set ycor mouse-ycor
+      set zcor initial-y-value
+      xyz<-- (x + who * 0.1)  y  z
+      pd
+    ]
+  ]
+end
+
+to create
+  clear-all
+  ifelse compare-trajectories
+  [ crt 2]
+  [ crt 1]
+  set initial-y-value 1
+end
 
 to setup
   clear-all
-  ifelse compare-trajectories
-  [ set number-of-turtles 2]
-  [ set number-of-turtles 1]
-  crt number-of-turtles
-    [setxy initial-x-value initial-z-value
-     set shape "circle" set size 0.1 pd
-     set zcor initial-y-value]
+  create
+  ask turtles [
+    setxy 1 1
+    set shape "circle" set size 0.1 pd
+    set zcor initial-y-value
+    xyz<-- (x + who * 0.1)  y  z
+  ]
 
-  ask turtles with [who > 0] ;; turtle 0 is exact!
-    [xyz<-- (x + intitial-difference-in-x-value)  y  z ]
+
+  (ifelse
+    parameter-setting = "Classic" [
+      set sigma 10
+      set beta 8 / 3
+      set rho 28]
+    parameter-setting = "Stretch" [
+      set sigma 3.4
+      set beta 34.4
+      set rho 3.22]
+    [
+      set sigma 20
+      set rho 18.9
+      set beta 0.91
+  ])
   reset-ticks
 end
 
 to-report difference report
-  (random-float (-1 ^ random 2)) * 10 ^ ( 0 - intitial-difference-in-x-value )
+  (random-float (-1 ^ random 2)) * 10 ^ ( 0.9 )
 end
 
 to run-simulation
@@ -44,9 +79,9 @@ to   xyz<-- [new-x new-y new-z]
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-209
+280
 10
-701
+772
 503
 -1
 -1
@@ -70,115 +105,10 @@ GRAPHICS-WINDOW
 ticks
 30.0
 
-SLIDER
-714
-220
-887
-253
-intitial-difference-in-x-value
-intitial-difference-in-x-value
-0.1
-5
-0.1
-0.1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-714
-10
-886
-43
-initial-x-value
-initial-x-value
-0
-10
-1.1
-0.1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-714
-45
-886
-78
-initial-y-value
-initial-y-value
-0
-20
-2.9
-0.1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-714
-80
-886
-113
-initial-z-value
-initial-z-value
-0
-20
-15.2
-0.1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-714
-115
-886
-148
-sigma
-sigma
-0
-20
-5.61
-0.01
-1
-NIL
-HORIZONTAL
-
-SLIDER
-714
-185
-886
-218
-beta
-beta
-0
-5
-1.465
-0.0001
-1
-NIL
-HORIZONTAL
-
-SLIDER
-714
-150
-886
-183
-rho
-rho
-0
-350
-29.0
-0.1
-1
-NIL
-HORIZONTAL
-
 BUTTON
-23
+155
 10
-196
+255
 43
 NIL
 setup
@@ -193,9 +123,9 @@ NIL
 1
 
 BUTTON
-23
+155
 45
-196
+255
 78
 run simulation
 run-simulation
@@ -210,10 +140,10 @@ NIL
 1
 
 SWITCH
-23
-115
-197
-148
+5
+10
+155
+43
 compare-trajectories
 compare-trajectories
 0
@@ -221,15 +151,42 @@ compare-trajectories
 -1000
 
 SWITCH
-23
-80
-196
-113
+5
+45
+155
+78
 slow-down-simulation
 slow-down-simulation
 0
 1
 -1000
+
+BUTTON
+155
+80
+255
+125
+NIL
+click
+T
+1
+T
+OBSERVER
+NIL
+C
+NIL
+NIL
+1
+
+CHOOSER
+5
+80
+155
+125
+parameter-setting
+parameter-setting
+"Classic" "Stretch" "Periodic"
+0
 
 @#$#@#$#@
 ## WHAT IS IT?
@@ -590,5 +547,5 @@ true
 Line -7500403 true 150 150 90 180
 Line -7500403 true 150 150 210 180
 @#$#@#$#@
-0
+1
 @#$#@#$#@
