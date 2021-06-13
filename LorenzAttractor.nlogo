@@ -3,7 +3,8 @@ turtles-own [zcor]
 
 to click
   if mouse-inside? and mouse-down? [
-    if not any? turtles[setup]
+    clear-drawing
+    if not any? turtles [create]
     ask turtles [
       pu
       set xcor mouse-xcor
@@ -18,9 +19,13 @@ end
 to create
   clear-all
   ifelse compare-trajectories
-  [ crt 2]
+  [ crt 2
+    ask turtle 1 [set color violet]
+  ]
   [ crt 1]
+  ask turtle 0 [set color green]
   set initial-y-value 1
+  reset-ticks
 end
 
 to setup
@@ -33,37 +38,28 @@ to setup
     xyz<-- (x + who * 0.1)  y  z
   ]
 
-
   (ifelse
     parameter-setting = "Classic" [
       set sigma 10
       set beta 8 / 3
       set rho 28]
     parameter-setting = "Stretch" [
-      set sigma 3.4
-      set beta 34.4
-      set rho 3.22]
+      set sigma 5.5
+      set beta 5.38
+      set rho 32.5]
     [
       set sigma 20
       set rho 18.9
       set beta 0.91
   ])
-  reset-ticks
-end
-
-to-report difference report
-  (random-float (-1 ^ random 2)) * 10 ^ ( 0.9 )
 end
 
 to run-simulation
+  if not any? turtles[setup]
   ask turtles
    [xyz<-- x + (  sigma * (y - x)    ) / 100 ;; small step size: fine lines
            y + (  x * (rho - z) - y  ) / 100
            z + (  x * y - beta * z   ) / 100 ]
-  if slow-down-simulation
-  [
-    wait 0.01
-  ]
    tick
 end
 
@@ -109,8 +105,8 @@ BUTTON
 155
 10
 255
-43
-NIL
+90
+Setup
 setup
 NIL
 1
@@ -123,11 +119,11 @@ NIL
 1
 
 BUTTON
-155
-45
+5
+145
 255
-78
-run simulation
+178
+Run simulation
 run-simulation
 T
 1
@@ -150,23 +146,12 @@ compare-trajectories
 1
 -1000
 
-SWITCH
-5
-45
-155
-78
-slow-down-simulation
-slow-down-simulation
-0
-1
--1000
-
 BUTTON
-155
-80
+5
+100
 255
-125
-NIL
+135
+Choose initial coordinates on mouse click
 click
 T
 1
@@ -180,9 +165,9 @@ NIL
 
 CHOOSER
 5
-80
+45
 155
-125
+90
 parameter-setting
 parameter-setting
 "Classic" "Stretch" "Periodic"
