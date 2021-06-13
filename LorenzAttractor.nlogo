@@ -44,9 +44,9 @@ to setup
       set beta 8 / 3
       set rho 28]
     parameter-setting = "Stretch" [
-      set sigma 5.5
-      set beta 5.38
-      set rho 32.5]
+      set sigma 5.7
+      set beta 5.07
+      set rho 35.5]
     [
       set sigma 20
       set rho 18.9
@@ -171,7 +171,7 @@ CHOOSER
 parameter-setting
 parameter-setting
 "Classic" "Stretch" "Periodic"
-0
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
