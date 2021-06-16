@@ -168,7 +168,7 @@ NIL
 @#$#@#$#@
 ## WHAT IS IT?
 
-This model shows an example of function that converges to the same fixed point, regardless of the starting point. This point, is also called a fixed point attractor. The function that is being used is: 
+This model shows a function that converges to the same fixed point, regardless of the starting point. This point, is also called a fixed point attractor. The function that is being used is: 
 
 f(x) = x/2 + 1/x 
 
