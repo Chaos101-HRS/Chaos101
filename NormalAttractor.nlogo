@@ -1,27 +1,74 @@
 to setup
   clear-all
-  crt 1
+  color-patches
+  ;create four turtles for the fixed point indicaters.
+    crt 1
     [set xcor sqrt 2  set ycor sqrt 2
      set shape "circle"
      set size 2
-     set color red pd]
-  crt 1
-    [setxy init-x init-y
+     set color red - 1.5 pu]
+    crt 1
+    [set xcor (-1 * sqrt 2)  set ycor sqrt 2
      set shape "circle"
-     set size 1
-     set color white pd]
-
+     set size 2
+     set color blue - 1.5 pu]
+    crt 1
+    [set xcor sqrt 2  set ycor (-1 * sqrt 2)
+     set shape "circle"
+     set size 2
+     set color blue - 1.5 pu]
+    crt 1
+    [set xcor -1 * sqrt 2  set ycor -1 * sqrt 2
+     set shape "circle"
+     set size 2
+     set color red - 1.5 pu]
+    create
   reset-ticks
 end
 
+;The position of turtle 4, the white circle, is altert.
+to click
+    if mouse-inside? and mouse-down? [
+    clear-drawing
+    ask turtle 4 [
+      pu
+      set xcor mouse-xcor
+      set ycor mouse-ycor
+      pd
+    ]
+  ]
+end
+
+to create
+  crt 1
+    [set shape "circle"
+     set size 1
+     set color white pd]
+      reset-ticks
+end
+
+;colours the patches, so that it is easier to see, which initial coordinated converge to which fixed point.
+to color-patches
+  ask patches with [ pycor >= 0  and pycor <= max-pycor and pxcor <= 0  and pycor >= min-pxcor]
+  [ set pcolor blue + 1.5]
+    ask patches with [ pycor <= 0  and pycor >= min-pycor and pxcor >= 0  and pycor <= max-pxcor]
+  [ set pcolor blue + 1.5]
+    ask patches with [ pycor > 0  and pycor <= max-pycor and pxcor > 0  and pycor <= max-pxcor]
+  [ set pcolor red + 1.5 ]
+    ask patches with [ pycor < 0  and pycor >= min-pycor and pxcor < 0  and pycor >= min-pxcor]
+  [ set pcolor red + 1.5  ]
+end
+
+;the function is applied iteratively.
 to go
-  ask turtle 1
+  ask turtle 4
   [
-   xy<-- y   x / 2 + 1 / x ]
+   xy<-- y  x / 2 + 1 / x ]
+  wait 0.5
    tick
 end
 
-;;;  simplified syntax, and scaling to use fewer patches
+;simplified syntax.
 
 to-report x report xcor end
 to-report y report ycor end
@@ -31,9 +78,9 @@ to   xy<-- [new-x new-y]
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-233
+252
 10
-667
+686
 445
 -1
 -1
@@ -57,42 +104,12 @@ GRAPHICS-WINDOW
 ticks
 30.0
 
-SLIDER
-15
-10
-187
-43
-init-x
-init-x
-0.1
-90
-0.0
-0.1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-17
-54
-189
-87
-init-y
-init-y
-0
-90
-90.0
-0.1
-1
-NIL
-HORIZONTAL
-
 BUTTON
-19
-100
-82
-133
-NIL
+13
+11
+244
+44
+Setup
 setup\n
 NIL
 1
@@ -105,18 +122,45 @@ NIL
 1
 
 BUTTON
-107
-105
-170
-138
-NIL
+12
+178
+243
+211
+Run simulation
 go
 T
 1
 T
 OBSERVER
 NIL
-G
+R
+NIL
+NIL
+1
+
+TEXTBOX
+19
+83
+249
+139
+After you have pressed on setup, select click. You can now click anywhere on the coloured screen to initialise the coordinates.
+11
+0.0
+1
+
+BUTTON
+13
+48
+244
+81
+Choose initial coordinates on mouse click
+click
+T
+1
+T
+OBSERVER
+NIL
+NIL
 NIL
 NIL
 1
@@ -124,39 +168,94 @@ NIL
 @#$#@#$#@
 ## WHAT IS IT?
 
-(a general understanding of what the model is trying to show or explain)
+This model shows an example of function that converges to the same fixed point, regardless of the starting point. This point, is also called a fixed point attractor. The function that is being used is: 
+
+f(x) = x/2 + 1/x 
+
+It has an attractor at x = sqrt 2.  
 
 ## HOW IT WORKS
 
-(what rules the agents use to create the overall behavior of the model)
+The function is iterated by always plugging in the output of the last iteration as the x-value. 
+
+You will get this behavior: 
+
+  1. x<sub>0</sub> is the initial x-value, this is chosen by the user.
+  2. After that the values evolve as follows:
+    x<sub>1</sub> = f(x<sub>0</sub>),
+    x<sub>2</sub> = f(x<sub>1</sub>) = f(f(x<sub>0</sub>)),
+    x<sub>3</sub> = f(x<sub>2</sub>) = f(f(x<sub>1</sub>)) = f(f(f(x<sub>0</sub>)))...
 
 ## HOW TO USE IT
 
-(how to use the model, including a description of each of the items in the Interface tab)
+1. Setup the graph by pressing the 'Setup' button. You should see red and blue rectangles with small coloured circles near the point where all four rectagles meet. There, a white circle should be visible too. 
+2. Now select the 'Choose initial coordinates on mouse click' button. This enables you to place the white ball anywhere on the screen. 
+3. Click anywhere on the red and blue screen to place the white circle.
+4. Press 'Run simulation' to see how the white circle converges to the fixed point attractor.
+5. As long as 'Choose initial coordinates on mouse click' is selected, you can keep placing the white circle somewhere on the screen.
+
 
 ## THINGS TO NOTICE
 
-(suggested things for the user to notice while running the model)
+Notice that the attractor can have both a positive and negative value. If you stay within the red rectangles, you will find the normal single fixed point. This point will have a positive value, if the initial x and y coordinates are both positive. Alternatively, it will have a negative value, if the initial x and y coordinates are both negative. However, it gets a bit weird if you let the x and y coordinates differ in positive and negative value. This can be explained by looking at the code:
 
-## THINGS TO TRY
+```text
+xy<-- y  x / 2 + 1 / x
+```
+The y value of the previous iteration will become the current x value. This means that if you start with either one positive and the other negative, the negation mark will switch. 
 
-(suggested things for the user to try to do (move sliders, switches, etc.) with the model)
+Iteration 0:
+    x = 1, y = -1
+```text
+xy<-- -1  1 / 2 + 1 / 1
+```
 
-## EXTENDING THE MODEL
+Iteration 1:
+    x = -1, y = 1.5
 
-(suggested things to add or change in the Code tab to make the model more complicated, detailed, accurate, etc.)
+```text
+xy<-- 1.5  -1 / 2 + 1 / -1
+```
 
-## NETLOGO FEATURES
+Iteration 2:
+   x = 1.5, y = -1.5
 
-(interesting or unusual features of NetLogo that the model uses, particularly in the Code tab; or where workarounds were needed for missing features)
+After some time the iteration will get stuck between two attractors: 
 
-## RELATED MODELS
+Iteration x:
+```text
+xy<-- sqrt 2  (- sqrt 2) / 2 + 1 / (- sqrt 2)
+```
+Iteration x + 1:
+```text
+xy<-- (- sqrt 2)  sqrt 2 / 2 + 1 / sqrt 2
+```
 
-(models in the NetLogo Models Library and elsewhere which are of related interest)
+As you can see, it won't matter wheter the initial x or initial y value is negative. You will find that, when you place the white circle in the blue rectangles, it will jump between the blue fixed points.
+
+This can be solved by taking the aboslute value of the output of the function. All intital coordinates will have x = sqrt 2 as attractor. 
+
+## EXTRA: the logistic map
+
+The logistic map is a dynamical system that was originally designed to be a population growth model. It features just one variable x, which represents the population level of the system, and one tuneable parameter r, which represents the growth rate of the system. The logistic map is considered to be one of the simplest chaotic systems, in the sense that it uses only one difference equation, and it is one-dimensional. The difference equation is:
+
+x<sub>t</sub>+1 = rx<sub>t</sub>(1 − x<sub>t</sub>)
+
+The behaviour of the logistic map is highly dependent on the setting
+of the parameter r. r can range from 0 to 4, and (in general) the higher
+the value of r, the more complicated the system behaves. We can roughly
+distinguish three types of behaviour arising from the setting of r: for r ≤ 3,
+the logistic map converges to a fixed point. For 3 < r < 3.544, the logistic
+map falls into a periodic motion. Finally, for r > 3.544, the motion of the
+system becomes completely chaotic.
+
 
 ## CREDITS AND REFERENCES
 
-(a reference to the model's URL on the web if it has one, as well as any other necessary credits, citations, and links)
+Seidel, P. Lecture Notes. 'Iteration, Fixed points' | MIT OpenCourseWare (fall 2011). https://math.mit.edu/classes/18.01/F2011/lecture3.pdf
+
+May, R. M. 'Simple mathematical models with very complicated dynamics,'
+Nature 261, no. 5560 (June 1976): 459–467, https://doi.org/10.1038/261459a0.
 @#$#@#$#@
 default
 true
