@@ -1,6 +1,7 @@
-globals [sigma rho beta initial-y-value]
-turtles-own [zcor]
+globals [sigma rho beta ]
+turtles-own [extra-cor]
 
+;The position of the turtles is altert.
 to click
   if mouse-inside? and mouse-down? [
     clear-drawing
@@ -9,13 +10,14 @@ to click
       pu
       set xcor mouse-xcor
       set ycor mouse-ycor
-      set zcor initial-y-value
+      set extra-cor ycor
       xyz<-- (x + who * 0.1)  y  z
       pd
     ]
   ]
 end
 
+;creates the turtles.
 to create
   clear-all
   ifelse compare-trajectories
@@ -24,20 +26,20 @@ to create
   ]
   [ crt 1]
   ask turtle 0 [set color green]
-  set initial-y-value 1
   reset-ticks
 end
 
 to setup
   clear-all
   create
+  ;all turtles are initiated at a standard coordinate.
   ask turtles [
     setxy 1 1
     set shape "circle" set size 0.1 pd
-    set zcor initial-y-value
+    set extra-cor ycor
     xyz<-- (x + who * 0.1)  y  z
   ]
-
+  ;set of parameters, that make different attractors.
   (ifelse
     parameter-setting = "Classic" [
       set sigma 10
@@ -47,6 +49,10 @@ to setup
       set sigma 5.7
       set beta 5.07
       set rho 35.5]
+        parameter-setting = "Fixed" [
+      set sigma 5.7
+      set beta 5.07
+      set rho 0.5]
     [
       set sigma 20
       set rho 18.9
@@ -54,30 +60,32 @@ to setup
   ])
 end
 
+;the lorenz equation is applied iteratively.
 to run-simulation
   if not any? turtles[setup]
   ask turtles
    [xyz<-- x + (  sigma * (y - x)    ) / 100 ;; small step size: fine lines
            y + (  x * (rho - z) - y  ) / 100
            z + (  x * y - beta * z   ) / 100 ]
+  wait 0.02
    tick
 end
 
-;;;  simplified syntax, and scaling to use fewer patches
+;simplified syntax, and scaling to use fewer patches
 
 to-report x report xcor * 10 end
 to-report z report ycor * 10 end
-to-report y report zcor * 10 end
+to-report y report extra-cor * 10 end
 
 to   xyz<-- [new-x new-y new-z]
   setxy new-x / 10    new-z / 10
-  set zcor new-y / 10
+  set extra-cor new-y / 10
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-280
+255
 10
-772
+747
 503
 -1
 -1
@@ -102,10 +110,10 @@ ticks
 30.0
 
 BUTTON
-155
 10
-255
-90
+10
+250
+60
 Setup
 setup
 NIL
@@ -119,10 +127,10 @@ NIL
 1
 
 BUTTON
-5
-145
-255
-178
+10
+310
+250
+343
 Run simulation
 run-simulation
 T
@@ -136,10 +144,10 @@ NIL
 1
 
 SWITCH
-5
 10
-155
-43
+120
+250
+153
 compare-trajectories
 compare-trajectories
 0
@@ -147,10 +155,10 @@ compare-trajectories
 -1000
 
 BUTTON
-5
-100
-255
-135
+10
+180
+250
+215
 Choose initial coordinates on mouse click
 click
 T
@@ -164,47 +172,69 @@ NIL
 1
 
 CHOOSER
-5
-45
-155
-90
+10
+240
+250
+285
 parameter-setting
 parameter-setting
-"Classic" "Stretch" "Periodic"
+"Classic" "Stretch" "Fixed" "Periodic"
+0
+
+TEXTBOX
+15
+60
+245
+105
+Press setup after you have selected new values. Setup does not have to be pressed after selecting initial variables on the screen. 
+11
+0.0
 1
 
 @#$#@#$#@
 ## WHAT IS IT?
 
-(a general understanding of what the model is trying to show or explain)
+This model shows the evolutionary trajectory of the lorenz attractor. With only three equations, lorenz made a model of rolling fluid convection, which is essentially the way hot air interacts with cold air.
+
+The equations he came up with are:
+```text
+(1) dx/dt = sigma * (y - x)
+(2) dy/dt = x * (rho - z) - y
+(3) dz/dt = x * y - beta * z
+```
+Here sigma represents the ratio of fluid viscosity to thermal conductivity, rho represents the difference in temperature between the top and bottom of the system and beta is the ratio of box width to box height. These three parameters are fixed. The variables that change over time are x, y and z. Thay represent the convective motion, temperature difference and temperature distortion, respectively.
 
 ## HOW IT WORKS
 
-(what rules the agents use to create the overall behavior of the model)
+The Lorenz system, is an example of a flow, which means that time
+and space is continuous in the system, rather than discrete. Flows are given by differential equations of the form dx/dt = f(t). Given a state x<sub>t</sub> at time t, the state at time t + ∆t is x<sub>t+∆t</sub> = xt + ∆t * dx/dt
 
 ## HOW TO USE IT
 
-(how to use the model, including a description of each of the items in the Interface tab)
+1. Turn the 'compare-trajectories' function on, to see what happens to two starting points with slightly differerent initial coordinates.
+2.  Now select the ‘Choose initial coordinates on mouse click’ button. This enables you to place the white ball anywhere on the screen. As long as ‘Choose initial coordinates on mouse click’ is selected, you can keep placing the white circle somewhere on the screen.
+3. Choose one of the pre-made parameter settings. This will intantiate sigma, rho and beta parameters.
+4. Press the ‘Setup’ button, to save all settings.
+5. Press ‘Run simulation’ to see a visualisation of how the lorenz equations evolve over time.
 
 ## THINGS TO NOTICE
 
-(suggested things for the user to notice while running the model)
+The real lorenz attractor has three dimensions, x, y and z. However, in this model only the bahavior along the x-axis and z-axis is shown. The y coordinate is still calculated each time, because it influences the x and z value, as can be seen in equations (1) and (3). When choosing the initial coordinates, by clicking on the screen, the y-coordinate is set the same as the z-coordinate. Although it may look like a trajectory crosses at certain points, it actually goes over or under itself, which would be visible in a 3D model. If a trajectory would cross itself at some point, it would make a periodic motion. Since the rules are completely deterministic, each input has a unique output.
+
+Furthermore, some combinations of settings make that the trajectory leaves the screen and returns through the other side. This is because the screen wraps around it self. Meaning that the top and bottom are connected, as well as the left and the right.
+
+There are a few fixed values, that the user cannot change: 
+
+- The intial difference between the two starting points, when 'compare-trajectories' is turned on is 0.1 along the x-axis. An even smaller difference would also work, but is would take longer to see the trajectories converging. 
+- There are 4 pre-made sets of parameter values. 
+	- Classic shows the well known chaotic lorenz attractor. The parameter values are: sigma = 10; beta = 8 / 3; rho = 28
+	- Stretch shows a stretched version of the chaotic attractor, the overall shape can still be recognised. The parameter values are: sigma = 5.7; beta = 5.07; rho = 35.5
+	- Fixed shows a fixed point attractor. The parameter values are: sigma = 5.7; beta = 5.07; rho = 0.5
+	- Periodic shows a periodic attractor. The parameter values are: sigma = 120; beta = 18.9; rho = 0.91
 
 ## THINGS TO TRY
 
-(suggested things for the user to try to do (move sliders, switches, etc.) with the model)
-
-## EXTENDING THE MODEL
-
-(suggested things to add or change in the Code tab to make the model more complicated, detailed, accurate, etc.)
-
-## NETLOGO FEATURES
-
-(interesting or unusual features of NetLogo that the model uses, particularly in the Code tab; or where workarounds were needed for missing features)
-
-## RELATED MODELS
-
-(models in the NetLogo Models Library and elsewhere which are of related interest)
+You may have seen that when you start the simulation with two slightly different starting points, two totally differnt trajectories appear. Now try the 'compare trajectories' function in combination with the periodic parameter setting. What do you notice now?
 
 ## CREDITS AND REFERENCES
 
