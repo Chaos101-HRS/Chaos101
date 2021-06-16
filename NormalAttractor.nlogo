@@ -64,7 +64,7 @@ to go
   ask turtle 4
   [
    xy<-- y  x / 2 + 1 / x ]
-  wait 0.5
+  wait 0.05
    tick
 end
 
