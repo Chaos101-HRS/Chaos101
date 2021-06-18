@@ -70,7 +70,6 @@ to go
   ]
 
   Ask turtles [set velocity (velocity  * friction)]
-      wait 0.0005
 
 end
 @#$#@#$#@
