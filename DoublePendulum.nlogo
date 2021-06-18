@@ -1,4 +1,4 @@
-globals [g]
+globals [g initial-angle-1 initial-angle-2 initial-velocity-1 initial-velocity-2 mass1 mass2 pendulum-1-length pendulum-2-length friction]
 turtles-own [angle velocity mass acceleration]
 undirected-link-breed [rods rod]
 
@@ -8,6 +8,16 @@ to setup
     set shape "circle"
     ]
   set g 9.81
+  set initial-angle-1 -45
+  set initial-velocity-1 0
+  set pendulum-1-length 5
+  set mass1 10
+  set initial-angle-2 -120
+  set initial-velocity-2 0
+  set pendulum-2-length 5
+  set mass2 10
+
+  set friction 0.99995
 
   ask turtle 1 [
     set angle initial-angle-1
@@ -30,10 +40,6 @@ to setup
     ]
 end
 
-to go-slowly
-    go
-    wait 0.1
-end
 
 to go
   let num11 (- g * (2 * ([mass] of turtle 1) + ([mass] of turtle 2)) * sin ([angle] of turtle 1))
@@ -50,21 +56,21 @@ to go
 
 
   ask turtle 1 [
-    set acceleration ((num11 + num12 + num13 * num14) / den1) / 1000
+    set acceleration ((num11 + num12 + num13 * num14) / den1) * (PI / 180)
     set velocity (velocity + acceleration)
     set angle (angle + velocity)
     setxy ((sin angle) * pendulum-1-length) (-(cos angle) * pendulum-1-length)
   ]
 
   ask turtle 2 [
-    set acceleration ((num21 * (num22 + num23 + num24)) / den2 ) / 1000
+    set acceleration ((num21 * (num22 + num23 + num24)) / den2 ) * (PI / 180)
     set velocity (velocity + acceleration)
     set angle (angle + velocity)
     setxy ((sin angle) * pendulum-2-length + [xcor] of turtle 1) (-(cos angle) * pendulum-2-length + [ycor] of turtle 1)
   ]
 
-  Ask turtles [set velocity (velocity  * 0.99988)]
-;  * (180 / PI)
+  Ask turtles [set velocity (velocity  * friction)]
+      wait 0.0005
 
 end
 @#$#@#$#@
@@ -95,67 +101,12 @@ GRAPHICS-WINDOW
 ticks
 30.0
 
-INPUTBOX
-5
-10
-160
-70
-Initial-angle-1
-90.0
-1
-0
-Number
-
-INPUTBOX
-5
-70
-160
-130
-initial-angle-2
-90.0
-1
-0
-Number
-
-INPUTBOX
-5
-130
-160
-190
-initial-velocity-1
-0.0
-1
-0
-Number
-
-INPUTBOX
-5
-190
-160
-250
-initial-velocity-2
-0.0
-1
-0
-Number
-
-INPUTBOX
-5
-250
-157
-310
-pendulum-1-length
-5.0
-1
-0
-Number
-
 BUTTON
-155
+20
 10
-218
+200
 43
-NIL
+Setup
 setup
 NIL
 1
@@ -167,23 +118,12 @@ NIL
 NIL
 1
 
-INPUTBOX
-5
-310
-157
-370
-pendulum-2-length
-5.0
-1
-0
-Number
-
 BUTTON
-155
-45
-218
-78
-NIL
+20
+50
+200
+83
+Go
 go
 T
 1
@@ -191,45 +131,6 @@ T
 OBSERVER
 NIL
 G
-NIL
-NIL
-1
-
-INPUTBOX
-5
-370
-157
-430
-mass1
-10.0
-1
-0
-Number
-
-INPUTBOX
-5
-430
-157
-490
-mass2
-10.0
-1
-0
-Number
-
-BUTTON
-150
-80
-232
-113
-NIL
-go-slowly
-T
-1
-T
-OBSERVER
-NIL
-NIL
 NIL
 NIL
 1
