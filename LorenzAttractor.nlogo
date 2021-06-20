@@ -197,17 +197,19 @@ Press setup after you have selected new values. Setup does not have to be presse
 This model shows the evolutionary trajectory of the lorenz attractor. With only three equations, lorenz made a model of rolling fluid convection, which is essentially the way hot air interacts with cold air.
 
 The equations he came up with are:
-```text
+
 (1) dx/dt = sigma * (y - x)
+
 (2) dy/dt = x * (rho - z) - y
+
 (3) dz/dt = x * y - beta * z
-```
+
 Here sigma represents the ratio of fluid viscosity to thermal conductivity, rho represents the difference in temperature between the top and bottom of the system and beta is the ratio of box width to box height. These three parameters are fixed. The variables that change over time are x, y and z. Thay represent the convective motion, temperature difference and temperature distortion, respectively.
 
 ## HOW IT WORKS
 
 The Lorenz system, is an example of a flow, which means that time
-and space is continuous in the system, rather than discrete. Flows are given by differential equations of the form dx/dt = f(t). Given a state x<sub>t</sub> at time t, the state at time t + ∆t is x<sub>t+∆t</sub> = xt + ∆t * dx/dt
+and space is continuous in the system, rather than discrete. Flows are given by differential equations of the form dx/dt = f(t). Given a state xt at time t, the state at time t + ∆t is x(t+∆t) = xt + ∆t * dx/dt
 
 ## HOW TO USE IT
 
@@ -219,13 +221,13 @@ and space is continuous in the system, rather than discrete. Flows are given by 
 
 ## THINGS TO NOTICE
 
-The real lorenz attractor has three dimensions, x, y and z. However, in this model only the bahavior along the x-axis and z-axis is shown. The y coordinate is still calculated each time, because it influences the x and z value, as can be seen in equations (1) and (3). When choosing the initial coordinates, by clicking on the screen, the y-coordinate is set the same as the z-coordinate. Although it may look like a trajectory crosses at certain points, it actually goes over or under itself, which would be visible in a 3D model. If a trajectory would cross itself at some point, it would make a periodic motion. Since the rules are completely deterministic, each input has a unique output.
+The real lorenz attractor has three dimensions, x, y and z. However, in this model only the bahavior along the x-axis and z-axis is shown. The y coordinate is still calculated each time, because it influences the x and z value, as can be seen in equations (1) and (3). When choosing the initial coordinates, by clicking on the screen, the y-coordinate is set the same as the z-coordinate. Although it may look like a trajectory crosses at certain points, it actually goes over or under itself, which would be visible in a 3D model. If a trajectory were to cross itself at some point, it would make a periodic motion. Since the rules are completely deterministic, each input has a unique output.
 
 Furthermore, some combinations of settings make that the trajectory leaves the screen and returns through the other side. This is because the screen wraps around it self. Meaning that the top and bottom are connected, as well as the left and the right.
 
 There are a few fixed values, that the user cannot change: 
 
-- The intial difference between the two starting points, when 'compare-trajectories' is turned on is 0.1 along the x-axis. An even smaller difference would also work, but is would take longer to see the trajectories converging. 
+- The intial difference between the two starting points, when 'compare-trajectories' is turned on is 0.1 along the x-axis. An even smaller difference would also work, but is would take longer to see the trajectories diverging. 
 - There are 4 pre-made sets of parameter values. 
 	- Classic shows the well known chaotic lorenz attractor. The parameter values are: sigma = 10; beta = 8 / 3; rho = 28
 	- Stretch shows a stretched version of the chaotic attractor, the overall shape can still be recognised. The parameter values are: sigma = 5.7; beta = 5.07; rho = 35.5
@@ -238,7 +240,12 @@ You may have seen that when you start the simulation with two slightly different
 
 ## CREDITS AND REFERENCES
 
-(a reference to the model's URL on the web if it has one, as well as any other necessary credits, citations, and links)
+Iapascurta, V. Lorenz Attractor 3D -- NetLogo Modeling Commons. Modelingcommons. http://modelingcommons.org/browse/one_model/5260#model_tabs_browse_info
+
+Moler, C. (2014). Periodic Solutions to the Lorenz Equations. Cleveâs Corner: Cleve Moler on Mathematics and Computing. https://blogs.mathworks.com/cleve/2014/04/28/periodic-solutions-to-the-lorenz-equations/
+
+Flake, G. W. (2000). The Computational Beauty of Nature (New edition). Amsterdam University 
+Press.
 @#$#@#$#@
 default
 true
