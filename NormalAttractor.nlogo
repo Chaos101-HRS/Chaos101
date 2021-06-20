@@ -180,11 +180,11 @@ The function is iterated by always plugging in the output of the last iteration 
 
 You will get this behavior: 
 
-  1. x<sub>0</sub> is the initial x-value, this is chosen by the user.
+  1. x0 is the initial x-value, this is chosen by the user.
   2. After that the values evolve as follows:
-    x<sub>1</sub> = f(x<sub>0</sub>),
-    x<sub>2</sub> = f(x<sub>1</sub>) = f(f(x<sub>0</sub>)),
-    x<sub>3</sub> = f(x<sub>2</sub>) = f(f(x<sub>1</sub>)) = f(f(f(x<sub>0</sub>)))...
+    x1 = f(x0),
+    x2 = f(x1) = f(f(x0)),
+    x3 = f(x2) = f(f(x1)) = f(f(f(x0)))...
 
 ## HOW TO USE IT
 
@@ -199,37 +199,34 @@ You will get this behavior:
 
 Notice that the attractor can have both a positive and negative value. If you stay within the red rectangles, you will find the normal single fixed point. This point will have a positive value, if the initial x and y coordinates are both positive. Alternatively, it will have a negative value, if the initial x and y coordinates are both negative. However, it gets a bit weird if you let the x and y coordinates differ in positive and negative value. This can be explained by looking at the code:
 
-```text
 xy<-- y  x / 2 + 1 / x
-```
+
 The y value of the previous iteration will become the current x value. This means that if you start with either one positive and the other negative, the negation mark will switch. 
 
 Iteration 0:
-    x = 1, y = -1
-```text
+x = 1, y = -1
+
 xy<-- -1  1 / 2 + 1 / 1
-```
+
 
 Iteration 1:
-    x = -1, y = 1.5
+x = -1, y = 1.5
 
-```text
 xy<-- 1.5  -1 / 2 + 1 / -1
-```
+
 
 Iteration 2:
-   x = 1.5, y = -1.5
+x = 1.5, y = -1.5
 
 After some time the iteration will get stuck between two attractors: 
 
 Iteration x:
-```text
+
 xy<-- sqrt 2  (- sqrt 2) / 2 + 1 / (- sqrt 2)
-```
+
 Iteration x + 1:
-```text
+
 xy<-- (- sqrt 2)  sqrt 2 / 2 + 1 / sqrt 2
-```
 
 As you can see, it won't matter wheter the initial x or initial y value is negative. You will find that, when you place the white circle in the blue rectangles, it will jump between the blue fixed points.
 
@@ -239,23 +236,20 @@ This can be solved by taking the aboslute value of the output of the function. A
 
 The logistic map is a dynamical system that was originally designed to be a population growth model. It features just one variable x, which represents the population level of the system, and one tuneable parameter r, which represents the growth rate of the system. The logistic map is considered to be one of the simplest chaotic systems, in the sense that it uses only one difference equation, and it is one-dimensional. The difference equation is:
 
-x<sub>t</sub>+1 = rx<sub>t</sub>(1 − x<sub>t</sub>)
+xt+1 = r*xt(1 − xt)
 
 The behaviour of the logistic map is highly dependent on the setting
 of the parameter r. r can range from 0 to 4, and (in general) the higher
 the value of r, the more complicated the system behaves. We can roughly
 distinguish three types of behaviour arising from the setting of r: for r ≤ 3,
-the logistic map converges to a fixed point. For 3 < r < 3.544, the logistic
-map falls into a periodic motion. Finally, for r > 3.544, the motion of the
-system becomes completely chaotic.
+the logistic map converges to a fixed point. In this simulation the chosen value for r is 2.8. For 3 < r < 3.544, the logistic map falls into a periodic motion. Finally, for r > 3.544, the motion of the system becomes completely chaotic.
 
 
 ## CREDITS AND REFERENCES
 
-Seidel, P. Lecture Notes. 'Iteration, Fixed points' | MIT OpenCourseWare (fall 2011). https://math.mit.edu/classes/18.01/F2011/lecture3.pdf
+Seidel, P. (2011). Iteration Fixed Points [Lecture Notes]. MIT OpenCourseWare. https://math.mit.edu/classes/18.01/F2011/lecture3.pdf
 
-May, R. M. 'Simple mathematical models with very complicated dynamics,'
-Nature 261, no. 5560 (June 1976): 459–467, https://doi.org/10.1038/261459a0.
+May, R. M. (1976). Simple mathematical models with very complicated dynamics. Nature, 261(5560), 459–467. https://doi.org/10.1038/261459a0
 @#$#@#$#@
 default
 true
