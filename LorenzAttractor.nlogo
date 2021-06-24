@@ -246,6 +246,11 @@ Moler, C. (2014). Periodic Solutions to the Lorenz Equations. Cleveâs Corner: C
 
 Flake, G. W. (2000). The Computational Beauty of Nature (New edition). Amsterdam University 
 Press.
+
+
+---
+
+This model was based on the Lorenz Attractor model by the Santa Fe Institute's Complexity explorer, and then adapted to fit the purposes of our project. You can find the Netlogo3D file of the Complexity Explorer model at https://www.complexityexplorer.org/explore/virtual-laboratory/127-lorenz-attractor.
 @#$#@#$#@
 default
 true

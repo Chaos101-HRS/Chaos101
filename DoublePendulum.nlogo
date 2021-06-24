@@ -1,4 +1,4 @@
-globals [g initial-angle-1 initial-angle-2 initial-velocity-1 initial-velocity-2 mass1 mass2 pendulum-1-length pendulum-2-length friction]
+globals [g initial-angle-1 initial-angle-2 initial-velocity-1 initial-velocity-2 mass1 mass2 length1 length2 friction]
 turtles-own [angle velocity mass acceleration]
 undirected-link-breed [rods rod]
 
@@ -10,21 +10,21 @@ to setup
   set g 9.81
   set initial-angle-1 -45
   set initial-velocity-1 0
-  set pendulum-1-length 5
+  set length1 5
   set mass1 10
   set initial-angle-2 -120
   set initial-velocity-2 0
-  set pendulum-2-length 5
+  set length2 5
   set mass2 10
 
-  set friction 0.99995
+  set friction 1
 
   ask turtle 1 [
     set angle initial-angle-1
     set velocity (initial-velocity-1 / 1000)
     set mass mass1
     set acceleration 0
-    setxy ((sin angle) * pendulum-1-length) (-(cos angle) * pendulum-1-length)
+    setxy ((sin angle) * length1) (-(cos angle) * length1)
     create-rod-with turtle 0
     pu
     ]
@@ -34,7 +34,7 @@ to setup
     set velocity (initial-velocity-2 / 1000)
     set mass mass2
     set acceleration 0
-    setxy ((sin angle) * pendulum-2-length + [xcor] of turtle 1) (-(cos angle) * pendulum-2-length + [ycor] of turtle 1)
+    setxy ((sin angle) * length2 + [xcor] of turtle 1) (-(cos angle) * length2 + [ycor] of turtle 1)
     create-rod-with turtle 1
     pd
     ]
@@ -45,28 +45,28 @@ to go
   let num11 (- g * (2 * ([mass] of turtle 1) + ([mass] of turtle 2)) * sin ([angle] of turtle 1))
   let num12 (- ([mass] of turtle 2) * g * sin (([angle] of turtle 1) - 2 * ([angle] of turtle 2)))
   let num13 (- 2 * sin (([angle] of turtle 1) - ([angle] of turtle 2)) * ([mass] of turtle 2))
-  let num14 ((([velocity] of turtle 2) * ([velocity] of turtle 2)) * pendulum-2-length + (([velocity] of turtle 1) * ([velocity] of turtle 1)) * pendulum-1-length * cos (([angle] of turtle 1) - ([angle] of turtle 2)))
-  let den1 (pendulum-1-length * (2 * ([mass] of turtle 1) + ([mass] of turtle 2) - ([mass] of turtle 2) * cos (2 * ([angle] of turtle 1) - 2 * ([angle] of turtle 2))))
+  let num14 ((([velocity] of turtle 2) * ([velocity] of turtle 2)) * length2 + (([velocity] of turtle 1) * ([velocity] of turtle 1)) * length1 * cos (([angle] of turtle 1) - ([angle] of turtle 2)))
+  let den1 (length1 * (2 * ([mass] of turtle 1) + ([mass] of turtle 2) - ([mass] of turtle 2) * cos (2 * ([angle] of turtle 1) - 2 * ([angle] of turtle 2))))
 
   let num21 (2 * sin (([angle] of turtle 1) - ([angle] of turtle 2)))
-  let num22 ((([velocity] of turtle 1) * ([velocity] of turtle 1)) * pendulum-1-length * (([mass] of turtle 1) + ([mass] of turtle 2)))
+  let num22 ((([velocity] of turtle 1) * ([velocity] of turtle 1)) * length1 * (([mass] of turtle 1) + ([mass] of turtle 2)))
   let num23 (g * (([mass] of turtle 1) + ([mass] of turtle 2)) * (cos [angle] of turtle 1))
-  let num24 ((([velocity] of turtle 2) * ([velocity] of turtle 2)) * pendulum-2-length * ([mass] of turtle 2) * cos (([angle] of turtle 1) - ([angle] of turtle 2)))
-  let den2 (pendulum-2-length * (2 * ([mass] of turtle 1) + ([mass] of turtle 2) - ([mass] of turtle 2) * cos (2 * ([angle] of turtle 1) - 2 * ([angle] of turtle 2))))
+  let num24 ((([velocity] of turtle 2) * ([velocity] of turtle 2)) * length2 * ([mass] of turtle 2) * cos (([angle] of turtle 1) - ([angle] of turtle 2)))
+  let den2 (length2 * (2 * ([mass] of turtle 1) + ([mass] of turtle 2) - ([mass] of turtle 2) * cos (2 * ([angle] of turtle 1) - 2 * ([angle] of turtle 2))))
 
 
   ask turtle 1 [
     set acceleration ((num11 + num12 + num13 * num14) / den1) * (PI / 180)
     set velocity (velocity + acceleration)
     set angle (angle + velocity)
-    setxy ((sin angle) * pendulum-1-length) (-(cos angle) * pendulum-1-length)
+    setxy ((sin angle) * length1) (-(cos angle) * length1)
   ]
 
   ask turtle 2 [
     set acceleration ((num21 * (num22 + num23 + num24)) / den2 ) * (PI / 180)
     set velocity (velocity + acceleration)
     set angle (angle + velocity)
-    setxy ((sin angle) * pendulum-2-length + [xcor] of turtle 1) (-(cos angle) * pendulum-2-length + [ycor] of turtle 1)
+    setxy ((sin angle) * length2 + [xcor] of turtle 1) (-(cos angle) * length2 + [ycor] of turtle 1)
   ]
 
   Ask turtles [set velocity (velocity  * friction)]
@@ -137,39 +137,26 @@ NIL
 @#$#@#$#@
 ## WHAT IS IT?
 
-(a general understanding of what the model is trying to show or explain)
+This model shows the trajectory of a double pendulum. A single pendulum exhibits very simple and predictable behaviour, but attach another pendulum to the weight of the first one and its trajectory changes dramatically. This double pendulum is famous for the complicated behaviour that emerges from the sum of two simple systems.
 
 ## HOW IT WORKS
 
-(what rules the agents use to create the overall behavior of the model)
+As you might expect, the physical laws that describe the movement of a simple pendulum are fairly simple. The laws of the double pendulum, however, are much more complicated because the two pendulums constantly affect each others trajectory. The exact laws, and how they are derived from the simpler equations of single pendulums, can be found in the myPhysicsLab source referenced below. 
+This model of a double pendulum is purely theoretical, of course. But you can fairly easily buy or make an actual double pendulum. This should perhaps illustrate that chaos is not just a theoretical term, it very much exists in our world and our environment. 
 
 ## HOW TO USE IT
 
-(how to use the model, including a description of each of the items in the Interface tab)
+There is little to tweak and tune for yourself in this model. Just press Setup and Go, and enjoy the beauty of chaos.
 
 ## THINGS TO NOTICE
 
-(suggested things for the user to notice while running the model)
-
-## THINGS TO TRY
-
-(suggested things for the user to try to do (move sliders, switches, etc.) with the model)
-
-## EXTENDING THE MODEL
-
-(suggested things to add or change in the Code tab to make the model more complicated, detailed, accurate, etc.)
-
-## NETLOGO FEATURES
-
-(interesting or unusual features of NetLogo that the model uses, particularly in the Code tab; or where workarounds were needed for missing features)
-
-## RELATED MODELS
-
-(models in the NetLogo Models Library and elsewhere which are of related interest)
+To be fair, this is only one possible trajectory of the pendulum. Apart from the chaotic properties it possesses (such as the butterfly effect), the trajectory is dependent on many different parameters. These are, for example, the masses of both pendulums and the friction of the system. In this model, the masses of both pendulums are equal. But if the mass of the first pendulum were bigger than that of the second one, the behaviour would be much less predictable. 
+Now let's consider the friction on the system. This model features no friction. If we were to increase the friction, however, the velocity of both pendulums would eventually die out, therefore converging to a fixed point: standstill.
+Of course, the value of those parameters is impossible to detect from just a picture of the initial position of the pendulums. So it was not really fair of us to ask you to predict the trajectory of the pendulum with just the incomplete information that you had ;)
 
 ## CREDITS AND REFERENCES
 
-(a reference to the model's URL on the web if it has one, as well as any other necessary credits, citations, and links)
+Erik Neumann (2021). Double Pendulum - myPhysicsLab. https://www.myphysicslab.com/pendulum/double-pendulum-en.html 
 @#$#@#$#@
 default
 true
